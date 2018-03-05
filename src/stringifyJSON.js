@@ -11,21 +11,28 @@ var stringifyJSON = function(obj) {
     return;
   } 
   // string
+  if (typeof obj === 'string') {
+    return '\"' + obj + '\"';
+  }
 
   // array
+  if (Array.isArray(obj)) {    
+    return '[' + obj.map(element => stringifyJSON(element)).join() + ']';
+}
   // object
   else if (obj && typeof obj === "object") {
     if(Object.keys(obj).length === 0) {
       return "{}";
     } else {
-    result = [];
-    for(var key in obj) {
-      if(typeof obj[key] === "function") {
-        return;
-      } else {
-        result.push('' + key + ":" + obj[key]);
+      result = [];
+      for(var key in obj) {
+        if(typeof obj[key] === "function" || typeof obj[key] === "undefined") {
+          return;
+        } else {
+          result.push('' + key + ":" + obj[key]);
+        }
       }
-    }  
+      return "{" + result.join() + "}";  
     }
   }
   // all else
