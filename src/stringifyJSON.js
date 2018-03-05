@@ -18,7 +18,7 @@ var stringifyJSON = function(obj) {
   // array
   if (Array.isArray(obj)) {    
     return '[' + obj.map(element => stringifyJSON(element)).join() + ']';
-}
+  }
   // object
   else if (obj && typeof obj === "object") {
     if(Object.keys(obj).length === 0) {
@@ -26,14 +26,15 @@ var stringifyJSON = function(obj) {
     } else {
       result = [];
       for(var key in obj) {
-        if(typeof obj[key] === "function" || typeof obj[key] === "undefined") {
-          return;
-        } else {
-          result.push('' + key + ":" + obj[key]);
+        if(typeof obj[key] !== "function" && typeof obj[key] !== "undefined") {
+          result.push('' + stringifyJSON(key) + ":" + stringifyJSON(obj[key]));
         }
       }
-      return "{" + result.join() + "}";  
     }
+      return "{" + result.join() + "}";  
   }
-  // all else
+
+  else {
+    return '' + obj;
+  }
 };
